@@ -1,0 +1,86 @@
+@import "tailwindcss";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@custom-variant dark (&:where(.dark,.dark *));
+
+@layer base {
+	.dark & {
+		@apply bg-[var(--bg-dark)] text-[var(--text-light)];
+	}
+}
+:root {
+	font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+	line-height: 1.5;
+	font-weight: 400;
+	scroll-behavior: smooth;
+	font-synthesis: none;
+	text-rendering: optimizeLegibility;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+
+	--mustard-yellow: #ffdb58;
+	--dark-teal: #005f5f;
+	--navy: #002f6c;
+	--charcoal: #333333;
+	--bg-light: #f5f5f5;
+	--bg-dark: #121212;
+	--card-bg-light: #ede0cb;
+	--card-bg-dark: #1e293b;
+	--hover-light: #005f5f;
+	--hover-dark: #374151;
+	--text-dark: #002f6c;
+	--text-light: #e2e8f0;
+	--dusty-lavender: #b39eb5;
+}
+
+/* Base styles for dark mode */
+.dark {
+	--bg-light: #121212;
+	--bg-dark: #f5f5f5;
+	--card-bg-light: #1e293b;
+	--card-bg-dark: #ede0cb;
+	--text-dark: #e2e8f0;
+	--text-light: #002f6c;
+	--hover-light: #374151;
+	--hover-dark: #005f5f;
+}
+
+body {
+	@apply bg-[var(--bg-light)] text-[var(--text-dark)];
+}
+
+input {
+	@apply w-full px-4 py-2 rounded-lg bg-[var(--card-bg-light)] text-[var(--text-dark)] focus:outline-none focus:ring-2 focus:ring-[var(--mustard-yellow)];
+}
+
+button {
+	@apply px-4 py-2 rounded-lg bg-[var(--mustard-yellow)] text-[var(--dark-teal)] font-semibold hover:bg-[var(--hover-light)] focus:outline-none focus:ring-2 focus:ring-[var(--mustard-yellow)];
+}
+
+form {
+	@apply rounded-lg bg-[var(--card-bg-light)] text-[var(--text-dark)] p-6 shadow-lg max-w-md mx-auto;
+}
+
+/* Consolidated styles for submit buttons */
+input[type="submit"],
+button[type="submit"] {
+	@apply bg-[var(--mustard-yellow)] text-[var(--dark-teal)] font-semibold hover:bg-[var(--hover-light)] focus:outline-none px-4 py-2 rounded-lg cursor-pointer transition-colors;
+}
+
+input[type="submit"]:disabled,
+button[type="submit"]:disabled {
+	@apply bg-gray-300 text-gray-500 cursor-not-allowed;
+}
+
+/* Updated nav styles */
+nav {
+	@apply flex flex-col sm:flex-row;
+}
+
+/* New layout for the Auth component container */
+.auth-container {
+	@apply flex flex-col sm:flex-row h-screen w-full;
+}
