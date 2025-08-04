@@ -6,17 +6,13 @@
 
 @custom-variant dark (&:where(.dark,.dark *));
 
-@layer base {
-	.dark & {
-		@apply bg-[var(--bg-dark)] text-[var(--text-light)];
-	}
-}
 :root {
 	font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
 	line-height: 1.5;
 	font-weight: 400;
 	scroll-behavior: smooth;
 	font-synthesis: none;
+	transition: color 0.3s ease-in-out, background-color 0.3s ease-in-out;
 	text-rendering: optimizeLegibility;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;

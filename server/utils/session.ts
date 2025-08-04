@@ -14,6 +14,8 @@ const transactione = (
 
     try {
       await fn(session, req, res)
+
+      if (session.inTransaction()) await session.commitTransaction()
     } catch (error) {
       if (session.inTransaction()) await session.abortTransaction()
       console.error('Transaction aborted due to error:', error)

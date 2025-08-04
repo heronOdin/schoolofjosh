@@ -1,19 +1,59 @@
+import { LoaderIcon } from 'lucide-react'
 import React from 'react'
+import { useParams } from 'react-router-dom'
+import { useData } from '../api/auth.api'
 
-const Courses: React.FC = () => {
+interface Course {
+  _id: string
+  title: string
+  duration: number
+}
+
+const Course: React.FC = () => {
+  const { courseId } = useParams()
+  const {
+    data: course,
+    isPending,
+    error,
+    isError
+  } = useData<Course>(`/api/courses/${courseId}`)
+
+  if (isPending) {
+    return (
+      <main>
+        <div className='container mx-auto p-4'>
+          <h1 className='text-2xl font-bold mb-4'>Loading...</h1>
+          <div className='flex justify-center items-center h-screen'>
+            <LoaderIcon
+              className='animate-spin text-[var(--mustard-yellow)]'
+              size={48}
+            />
+          </div>
+        </div>
+      </main>
+    )
+  }
+
+  if (isError) {
+    return (
+      <main>
+        <div className='container mx-auto p-4'>
+          <h1 className='text-2xl font-bold mb-4'>Error</h1>
+          <div className='text-red-500'>{error.message}</div>
+        </div>
+      </main>
+    )
+  }
+
   return (
     <main>
-      <h1>Courses</h1>
-      <p>Welcome to the courses page!</p>
-      <p>Here you can find a list of all available courses.</p>
-      <ul>
-        <li>Course 1: Introduction to Programming</li>
-        <li>Course 2: Advanced JavaScript</li>
-        <li>Course 3: React for Beginners</li>
-        <li>Course 4: Node.js and Express</li>
-      </ul>
+      <div className='container mx-auto p-4'>
+        <h1 className='text-2xl font-bold mb-4'>{course.title}</h1>
+        <p className='text-lg'>Duration: {course.duration} hours</p>
+        <p className='mt-4'>This is the course details page.</p>
+      </div>
     </main>
   )
 }
 
-export default Courses
+export default Course

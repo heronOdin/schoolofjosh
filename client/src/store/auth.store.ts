@@ -23,8 +23,22 @@ const useAuthStore = create<IAuth>()(
       user: null,
       isLoggedIn: false,
       setUser: (user: IUser | null) => set({ user }),
-      toggleIsDark: () => set(state => ({ isDark: !state.isDark })),
       isDark: false,
+
+      toggleIsDark: () => {
+        const darkness = !document.documentElement.classList.contains('dark')
+
+        if (darkness) {
+          document.documentElement.classList.add('dark')
+          localStorage.setItem('theme', 'dark')
+        } else {
+          document.documentElement.classList.remove('dark')
+          localStorage.remove('theme')
+        }
+        set(state => ({
+          isDark: !state.isDark
+        }))
+      },
       login: (user: IUser) => {
         set({ user, isLoggedIn: true })
       },

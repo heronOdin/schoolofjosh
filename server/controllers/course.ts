@@ -11,7 +11,7 @@ const newCourse = async (
   const { title, duration } = req.body
 
   try {
-    const existingCourse = await Course.findOne({ title }).session(session)
+    const existingCourse = await Course.findOne({ title })
 
     if (existingCourse) {
       res.status(400).json({ message: 'Course with this title already exists' })
@@ -38,7 +38,8 @@ const allCourses = async (
   res: Response
 ) => {
   try {
-    const courses = await Course.find().session(session)
+    const courses = await Course.find()
+    console.log('Fetching all courses:', courses)
 
     res.status(200).json(courses)
   } catch (error: any) {
@@ -56,7 +57,7 @@ const thisCourse = async (
   const { courseId } = req.params
 
   try {
-    const course = await Course.findById(courseId).session(session)
+    const course = await Course.findById(courseId)
 
     if (!course) {
       res.status(404).json({ message: 'Course not found' })
@@ -84,7 +85,7 @@ const updateCourse = async (
       courseId,
       { title, duration },
       { new: true }
-    ).session(session)
+    )
 
     if (!course) {
       res.status(404).json({ message: 'Course not found' })
@@ -107,7 +108,7 @@ const deleteCourse = async (
   const { courseId } = req.params
 
   try {
-    const course = await Course.findByIdAndDelete(courseId).session(session)
+    const course = await Course.findByIdAndDelete(courseId)
 
     if (!course) {
       res.status(404).json({ message: 'Course not found' })

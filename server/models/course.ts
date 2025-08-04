@@ -29,7 +29,7 @@ const courseSchema = new Schema(
       ],
       validate: {
         validator: (n: Types.ObjectId[]) => {
-          n.length >= 24
+         return n.length >= 24
         },
         message: 'At least one unit is required.'
       }

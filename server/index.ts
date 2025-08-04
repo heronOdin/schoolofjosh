@@ -37,16 +37,32 @@ app.use(passport.initialize())
   await connectDB(MONGO_URI)
 })()
 
+app.get('/', (req, res) => {
+  console.log('Welcome to the School of Josh API')
+  res.send('Welcome to the School of Josh API' + new Date().toISOString())
+})
+
+app.use((req, res, next) => {
+  const start = Date.now()
+  res.on('finish', () => {
+    const duration = Date.now() - start
+    console.log(
+      `[${new Date().toISOString()}] ${req.method} ${
+        req.originalUrl
+      } - Body: ${JSON.stringify(req.body)} - Status: ${
+        res.statusCode
+      } - Duration: ${duration}ms`
+    )
+  })
+  next()
+})
+
 app.use('/users', userRouter)
 app.use('/api', passport.authenticate('jwt', { session: false }))
 app.use('/api/enrollments', enrollmentRoutes)
 app.use('/api/courses', courseRoutes)
 app.use('/api/units', unitRouter)
 app.use('/api/users', userRoutes)
-
-app.get('/', (req, res) => {
-  res.send('Welcome to the School of Josh API' + new Date().toISOString())
-})
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`)

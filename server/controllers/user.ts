@@ -162,7 +162,7 @@ const deleter = async (session: ClientSession, req: Request, res: Response) => {
   const { id } = req.params
 
   try {
-    await User.findByIdAndDelete({ id })
+    await User.findByIdAndDelete(id)
 
     res.status(200).json({ message: `Deleting account successful` })
   } catch (error: any) {
