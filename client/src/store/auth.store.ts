@@ -1,50 +1,50 @@
 import { create } from 'zustand'
-import { createJSONStorage, persist } from 'zustand/middleware'
+import { persist } from 'zustand/middleware'
 
-interface IUser {
-  id: string
-  email: string
+interface User {
+  userId: string
   username: string
-  role: 'user' | 'admin' | 'teacher'
+  email: string
+  role: 'student' | 'teacher' | 'admin'
 }
 
-export interface IAuth {
+interface AuthState {
+  user: User | null
+  token: string | null
   isLoggedIn: boolean
-  user: IUser | null
   isDark: boolean
-  toggleIsDark: () => void
-  login: (user: IUser) => void
+  login: (user: User, token: string) => void
   logout: () => void
+  toggleIsDark: () => void
 }
 
-const useAuthStore = create<IAuth>()(
+const useAuthStore = create<AuthState>()(
   persist(
-    set => ({
+    (set) => ({
       user: null,
+      token: null,
       isLoggedIn: false,
-      setUser: (user: IUser | null) => set({ user }),
       isDark: false,
-
-      toggleIsDark: () => {
-        const darkness = !document.documentElement.classList.contains('dark')
-
-        if (darkness) {
-          document.documentElement.classList.add('dark')
-          localStorage.setItem('theme', 'dark')
-        } else {
-          document.documentElement.classList.remove('dark')
-          localStorage.remove('theme')
-        }
-        set(state => ({
-          isDark: !state.isDark
-        }))
+      login: (user, token) => {
+        localStorage.setItem('token', token)
+        set({ user, token, isLoggedIn: true })
       },
-      login: (user: IUser) => {
-        set({ user, isLoggedIn: true })
+      logout: () => {
+        localStorage.removeItem('token')
+        set({ user: null, token: null, isLoggedIn: false })
       },
-      logout: () => set({ user: null, isLoggedIn: false })
+      toggleIsDark: () => set((state) => ({ isDark: !state.isDark }))
     }),
-    { name: 'auth', storage: createJSONStorage(() => localStorage) }
+    {
+      name: 'auth-storage',
+      partialize: (state) => ({
+        user: state.user,
+        token: state.token,
+        isLoggedIn: state.isLoggedIn,
+        isDark: state.isDark
+      }),
+      version: 1
+    }
   )
 )
 

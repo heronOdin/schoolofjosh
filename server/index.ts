@@ -8,9 +8,9 @@ import connectDB from './utils/connectDB'
 import enrollmentRoutes from './routes/enrollmentRoutes'
 import passport from './middleware/passport'
 import userRouter from './routes/userRoutes'
+import userRoute from './routes/user'
 import courseRoutes from './routes/courseRoutes'
 import unitRouter from './routes/unit'
-import userRoutes from './routes/userRoutes'
 
 const app = express()
 
@@ -58,11 +58,12 @@ app.use((req, res, next) => {
 })
 
 app.use('/users', userRouter)
+app.use('/', userRoute)
 app.use('/api', passport.authenticate('jwt', { session: false }))
 app.use('/api/enrollments', enrollmentRoutes)
 app.use('/api/courses', courseRoutes)
 app.use('/api/units', unitRouter)
-app.use('/api/users', userRoutes)
+app.use('/api/users', userRoute)
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`)

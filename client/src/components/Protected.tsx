@@ -5,9 +5,7 @@ import { Loader2Icon } from 'lucide-react'
 
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const { isLoggedIn } = useAuthStore()
-  const { data: isValid, isPending } = useVerifyToken(
-    import.meta.env.VerifyToken
-  )
+  const { data: isValid, isPending } = useVerifyToken()
 
   if (isPending) {
     return <Loader2Icon className='' />

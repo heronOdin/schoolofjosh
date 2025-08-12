@@ -1,14 +1,40 @@
-import type React from 'react'
-import { Route, BrowserRouter as Router, Routes } from 'react-router-dom'
+/* import { useEffect, useState } from 'react'
+ */ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 
-import Navbar from './components/Navbar'
-import Courses from './pages/courses'
+/* import useAuthStore from './store/auth.store'
+import useVerifyToken from './utils/verify'
+ */ import Navbar from './components/Navbar'
 import Home from './pages/home'
 import Auth from './pages/auth'
-import ProtectedRoute from './pages/Protected'
+import Courses from './pages/courses'
 import Course from './pages/course'
+import ProtectedRoute from './components/Protected'
 
 const App: React.FC = () => {
+  /*    const { isDark, user } = useAuthStore()
+  const { data: isValidToken } = useVerifyToken()
+  const [isHydrated, setIsHydrated] = useState(false)
+
+ useEffect(() => {
+    document.documentElement.classList.toggle('dark', isDark)
+  }, [isDark])
+
+  console.log(isValidToken)
+
+  useEffect(() => {
+    const unsubHydration = useAuthStore.persist.onFinishHydration(() => {
+      setIsHydrated(true)
+      console.log(user)
+    })
+    return () => {
+      unsubHydration()
+    }
+  }, [user])
+
+  if (!isHydrated) {
+    return null
+  } */
+
   return (
     <main className='bg-[var(--bg-light)] dark:bg-[var(--bg-light)] '>
       <Router>

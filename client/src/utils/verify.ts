@@ -1,25 +1,31 @@
 import { useQuery } from '@tanstack/react-query'
+import axios from '../api/axios'
 import useAuthStore from '../store/auth.store'
-import apiClient from '../api/axios'
 
-const useVerifyToken = (url: string) => {
-  const { logout } = useAuthStore()
+const useVerifyToken = () => {
+  const { token, logout } = useAuthStore()
 
   return useQuery({
-    queryKey: ['verify-token', url],
+    queryKey: ['verify-token'],
     queryFn: async () => {
-      try {
-        await apiClient.get(url)
+      if (!token) return false
 
-        return true
+      try {
+        const { data } = await axios.get('/users/verify', {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        })
+        return data.valid as boolean
       } catch (error) {
         console.error('Token verification failed:', error)
         logout()
         return false
       }
     },
-    refetchOnMount: true,
-    retry: false
+    enabled: !!token,
+    retry: 1,
+    staleTime: 5 * 60 * 1000
   })
 }
 

@@ -16,7 +16,7 @@ const Course: React.FC = () => {
     isPending,
     error,
     isError
-  } = useData<Course>(`/api/courses/${courseId}`)
+  } = useData<Course>(`${import.meta.env.VITE_APP_COURSE_URL}/${courseId}`)
 
   if (isPending) {
     return (
