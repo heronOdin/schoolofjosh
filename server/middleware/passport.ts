@@ -30,7 +30,14 @@ passport.use(
 passport.use(
   new JWTStrategy(
     {
-      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      jwtFromRequest: req => {
+        let token = req.cookies.jwt
+
+        if (!token && req.headers.authorization?.startsWith(`Bearer`)) {
+          token = req.headers.authorization?.split(' ')[1]
+        }
+        return token
+      },
       secretOrKey: JWT_SECRET
     },
     async (payload: any, done: any) => {

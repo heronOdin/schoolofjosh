@@ -75,13 +75,19 @@ const signin = async (session: ClientSession, req: Request, res: Response) => {
       console.error('Invalid email or password')
       return
     }
-    {
-    }
+
     const token = jwt.sign({ userId: user._id, role: user.role }, JWT_SECRET, {
       expiresIn: '1h'
     })
 
     console.log('User authenticated successfully:', user, token)
+
+    res.cookie('jwt', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production', // Only sends over HTTPS in production
+      sameSite: 'strict',
+      maxAge: 60 * 60 * 1000 // 1 hour
+    })
 
     res.status(200).json({
       user: {
@@ -89,8 +95,7 @@ const signin = async (session: ClientSession, req: Request, res: Response) => {
         username: user.username,
         email: user.email,
         role: user.role
-      },
-      token
+      }
     })
     return
   } catch (error: any) {
@@ -171,6 +176,10 @@ const deleter = async (session: ClientSession, req: Request, res: Response) => {
       .json({ message: `Deleting accout unsuccessful ${error.stack} ` })
     return
   }
+}
+
+export const signOut = async (req: Request, res: Response) => {
+  res.clearCookie('auth').send({ auth: false })
 }
 
 export const deleteUser = transactione(deleter)

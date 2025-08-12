@@ -5,7 +5,7 @@ export interface IUser extends Document {
   username: string
   email: string
   password: string
-  role: 'student' | 'teacher' | 'admin'
+  role: string
   comparePassword(candidate: string): Promise<Boolean>
 }
 
